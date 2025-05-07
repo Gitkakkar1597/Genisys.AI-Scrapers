@@ -3,4 +3,4 @@ requests
 python-dotenv
 scrapy
 pydantic
-pyenv
+black
