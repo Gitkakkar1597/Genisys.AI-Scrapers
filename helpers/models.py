@@ -1,7 +1,7 @@
 from pydantic import BaseModel, HttpUrl, EmailStr, Field
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 from datetime import datetime
-
+from enum import Enum
 
 class Medias(BaseModel):
     url : Optional[str] =Field(... , description="Post media url")
@@ -68,6 +68,36 @@ class UserModel(BaseModel):
     mentions_count: str = Field(... , description= "User ID in social media platform")
     sentiment: str = Field(... , description= "User ID in social media platform")
     
+
+
+class CrawlType(Enum):
+    KEYWORD: 1
+    HASHTAG: 2
+    PROFILE: 3
     
+class SourceType(Enum):
+    SEARCH_ENGINE = 1
+    SOCIAL_MEDIA = 2
+    
+
+    
+class CrawlerRequest(BaseModel):
+    query: str = Field(..., description="The query to crawl posts for")
+    sources: list = Field(..., description="Names of the social media sources")
+    limit: int = Field(..., description="Maximum number of posts to scrape")
+    type: CrawlType
+    source_type: SourceType
+    
+class SessionRequest(BaseModel):
+    username: Optional[str] = Field(... , description="Account creds")
+    password: Optional[str] = Field(... , description="Account creds")
+    email : Optional[str] = Field(... , description="Account creds")
+    number : Optional[str] = Field(... , description="Account creds")
+    source  : Optional[str] = Field(... , description="Account creds")
+    source_type: Optional[str] = Field(... , description="Account creds")
+    
+
+class AutomationEngine(BaseModel):
+    request: Union[SessionRequest, CrawlerRequest] = Field(... , description="Automation type message request")
     
     
